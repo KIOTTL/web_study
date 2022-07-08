@@ -60,6 +60,7 @@ public class MusicServlet extends HttpServlet {
 		};
 		out.println("<html>");
 		out.println("<head>");	// style, script
+		out.println("<link rel=stylesheet href=table.css>");
 		out.println("</head>");
 		out.println("<body>");	// 화면 출력
 		out.println("<center>");
@@ -95,7 +96,7 @@ public class MusicServlet extends HttpServlet {
 		 *  --   -- 
 		 *  제목  실제 데이터
 		 */
-		out.println("<table border=1 bordercolor=black width=960>");
+		out.println("<table id=table_content width=960>");
 		// 제목
 		out.println("<tr>");
 		out.println("<th>순위</th>");
@@ -106,7 +107,7 @@ public class MusicServlet extends HttpServlet {
 		out.println("</tr>");
 		// 데이터 출력
 		for(MusicVO vo:list	) {
-			out.println("<tr>");
+			out.println("<tr class=dataTr>");	// 중복 허용 => class
 			out.println("<td>"+vo.getMno()+"</td>");
 			out.println("<td>");
 			out.println("<img src="+vo.getPoster()+" width=30 height=30>");
