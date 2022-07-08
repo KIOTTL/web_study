@@ -120,7 +120,7 @@ public class MusicServlet extends HttpServlet {
 		out.println("<td colspan=5 align=center>");
 		out.println("<a href=MusicServlet?cno="+cno+"&page="+(curpage>1?curpage-1:curpage)+">이전</a>");
 		out.println(curpage+" page / "+totalpage+" pages");
-		out.println("<a href=#>다음</a>");
+		out.println("<a href=MusicServlet?cno="+cno+"&page="+(curpage<totalpage?curpage+1:curpage)+">다음</a>");
 		out.println("</td>");
 		out.println("</tr>");
 		out.println("</table>");
