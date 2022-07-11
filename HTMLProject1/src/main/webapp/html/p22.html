@@ -1,0 +1,201 @@
+<!-- 
+	주석처리
+	
+	웹 동작
+	-----
+	  뒙 서버 (서버) => 파일 찾아서 전송(응답)
+	  브라우저 (클라이언트) => 요청 (파일)
+	                   => 서버와 연결되는 부분 (주소창)
+	                   
+	서버에서 실행하는 프로그램 (서버 프로그램)
+		JSP / Spring / Spring-Boot / Oracle / Java => Back
+	클라이언트에서 실행되는 프로그램 (클라이언트 프로그램)
+		HTML / CSS / JavaScript => Front
+		
+	HTML : 브라우저에서 실행되는 언어 (XML, WML, HDML, VML)
+	  -- 마크업 언어              -----     ------ 
+	    	태크 / 속성 
+	    	--------- 
+	    	HTML은 고정적 => 태그가 지정됨
+	    	XML은 가변형 => 사용자 정의
+	    	CSS => 화면 디자인
+	    	JavaScript => 브라우저에서 동적
+	
+	HTML5 주요 기능
+		HTML5 : 퉵페이지 구성
+		CSS3 : 스타일 적용 (화면 디자인)
+		자바스크립트 ES5 ==> ES6 : 사용자 반응 처리
+	
+	HTML => HyperText Markup Language
+	---------------------------------
+	   HTML4 + 기타
+	           --- 멀티미디어 (<video>, <audio>)
+	               그래픽 (<canvas>)
+	               CSS3
+	               JavaScript (쓰레드, DB연동)
+	               시멘텍 (<header>, <nav>, <footer>, <section>, <aside>, <div>, ...)
+	   편집기 : 이클립스, VSCODE, 웹스톰, 아톰, EditPlus
+	   
+	   HTML 용어	
+	 		태그 / 속성 => 지정되어 있다
+	 		--- 여는 태그 : <태크명>
+	 			닫는 태그 : </태그명>
+	 			독립 태그 (Empty) : <태그명 />
+	 			--------------------------
+	 			 여는 태그, 닫는 태그가 쌍으로 만들어짐
+	 			 -----------------------------
+	 			 <>출력할 데이터</>
+	 			 < 속성="출력할 데이터"> : link, image, form, ...
+	 			 --------------------------------------------
+	 			 문자 관련 태그
+	 			 	<h> : heading 제목 설정 => <h1> ~~ <h6>
+	 			 	<b> : bold 강조체 => <strong> <i>, <mark>
+	 			 	<font>
+	 			 화면 이동 태크
+	 			 	<a>, <form>
+	 			 이미지 태그
+	 			 	<img>
+	 			 라인선 태그
+	 			 	<hr>
+	 			 입력란
+	 			 	<input type=""> : 한 줄 입력
+	 			 		   type="text"
+	 			 		   type="password"
+	 			 		   type="file"
+	 			 		   type="button", "radio", "checkbox", "submit", "reset", "image"
+	 			 		   type="hidden"
+	 			 		   ------------- HTML4
+	 			 		   type="number"
+	 			 		   type="date"
+	 			 		   ------------- HTML5
+	 			 	<textarea> : 여러 줄 입력
+	 			 	<select> : 콤보 박스
+	 			 단락 나누기 / 다음 줄 출력
+	 			 	<p>   /  <br>
+	 			 화면 분할          
+	 			 	<span> : 가로분할
+	 			 	<div> : 세로분할       
+	 			 	
+	 HTML 구조
+	 	<!DOCTYPE html> : HTML5 문서를 알려주는 선언식 => 첫 줄에 온다
+	 	<html>
+	 		<head>
+	 		    // 설정 => 자바스크립트, CSS
+	 		    // 화면 출력하는 부분 X
+	 		    <script> 자바스크립트 </script>
+	 		    <style> CSS </style>
+	 		    <meta charset="UTF-8"> : 한글 변환, 화면 자동 이동
+				<title>Insert title here</title> : 제목
+	 		</head>
+	 		<body>
+	 		   // 브라우저 화면에 출력
+	 		</body>
+	 	<html>
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!--  
+<title>HTML5 태크</title>
+<style type="text/css">
+h1 {
+	background-color:green;
+	color:red;
+	text-align:center;
+}
+</style>
+-->
+<!-- 
+<script type="text/javascript">
+function send() {
+	alert("Hello HTML5");
+}
+</script>
+ -->
+<style type="text/css">
+/* a {
+ 	display: block;
+} */
+h1 {
+	display: inline;
+}
+</style>
+</head>
+<body>
+	<!--  Heading 제목 (<h1>~<h6>)
+		  형식)
+		  	<h1> 출력할 데이터 </h1>
+		  	<hn> : 제목 설정 => 자동으로 bold, br
+		  	HTML에서 문자열은 한 줄 문자열
+	 -->
+	 <h1>HTML5 H1 : 태그는 소문자로만 사용</h1>
+	 <h2>HTML5 H2 : 태그는 소문자로만 사용</h2>
+	 <h3>HTML5 H3 : 태그는 소문자로만 사용</h3>
+	 <h4>HTML5 H4 : 태그는 소문자로만 사용</h4>
+	 <h5>HTML5 H5 : 태그는 소문자로만 사용</h5>
+	 <h6>HTML5 H6 : 태그는 소문자로만 사용</h6>
+	 <!-- 
+	 <pre> 7월을 기점으로 코로나19에 이미 한번 감염된 사람도 재차 감염될 가능성이 높아졌다는 우려가 나온다. 
+	 코로나19 감염으로 얻은 자연면역이 통상 3~6개월 뒤 소실된다는 점을 감안하면 올해 오미크론 변이바이러스 대유행이 발생한 1~3월 사이 감염된 사람의 재감염 위험이 본격적으로 높아지는 시점이 7월이기 때문이다. 
+	 게다가 면역회피력이 높은 오미크론 하위 변이도 확산하고 있어 재감염 우려를 더 키운다. 여기에 이동량이 늘어나는 여름 휴가철까지 겹치는 셈이다. 이에따라 방역당국은 재유행이 찾아올 가능성도 배제하지 않는다. 
+	 재유행시 하루 확진자가 15~20만명까지 갈 수 있다는 전망이 나온다.
+	 <a href="">aaa</a>
+	 <a href="">bbb</a>
+	 <a href="">ccc</a>
+	 -->	
+	 <!--
+	 	태그 속성
+	 	  - block : System.out.println()
+	 	  - inline : System.out.print()
+	  -->
+	  <!-- 
+	  	p : 단락
+	  	br : new Line 다음 줄
+	  	hr : 수평선
+	  	---- 여는 태그만 존재
+	  -->
+	  <hr>
+	  한낮에 점심 영업을 하던 식당으로 80대 운전자가 몰던 승용차가 돌진하는 사고가 일어났다.<p>
+
+	  4일 서울 송파소방서에 따르면 이날 낮 12시48분쯤 송파구 잠실동에서 80대 운전자 A씨가<br> 
+	  몰던 승용차가 식당으로 돌진하는 사고가 발생했다.<p>
+	
+      이 식당에는 종업원 5명과 손님 20명이 있었으나 승용차가 기둥을 들이받고 멈춰 인명 피해는<br> 
+	  없었다. A씨는 차량에서 자력으로 탈출했지만 경상을 입어 인근 병원으로 이송됐다.
+	  <hr>
+	  <!-- 
+	  	b : bold
+	  	i : 이탤릭
+	  	small : 작은 글자
+	  	sub : 아래 첨자
+	  	sup : 윗 첨자
+	  	strong : 강조체 ==> i
+	  --> 
+	  A씨는 차량에서 자력으로 탈출했지만 <b>경상</b>을 입어 인근 병원으로 이송됐다.<br>
+	  <i>낮 12시48분쯤 <mark>송파구</mark> 잠실동</i><br>
+	  <marquee>4일 서울 송파소방서</marquee><br>
+	  <blockquote>80대 운전자</blockquote>가 몰던 승용차가 돌진하는 사고
+	  <br>
+	  이 식당에는 종업원 5명과 손님 20명이 있었으나<sup style="color:red">new</sup>
+	  <br>
+	  <!-- 
+	  	a : link 태그 => 원하는 파일로 이동
+	  	<a href="이동할 url">문자열</a> => inline 속성
+	  	&nbsp; : 공백
+	  	target="_blank" : 새로운 창
+	  --> 
+	  <a href="http://www.naver.com" target="_blank">Naver</a>&nbsp;
+	  <a href="http://www.daum.net">Daum</a>
+	  <!-- 태그 중 가장 많이 사용되는 태그 <a> 태그 -->
+</body>
+</html>
+
+
+
+
+
+
+
+
+
