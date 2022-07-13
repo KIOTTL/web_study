@@ -7,7 +7,7 @@ public class EmpDAO {
 	private Connection conn;
 	private PreparedStatement ps;
 	// CallableStatement cs; => Procedure
-	private final String URL="jdbc:oracle:thin:@183.98.140.90:1521:XE";
+	private final String URL="jdbc:oracle:thin:@localhost:1521:XE";
 	
 	// 드라이버
 	public EmpDAO() {
