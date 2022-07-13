@@ -23,7 +23,7 @@ public class ZipcodeDAO {
 	private PreparedStatement ps;
 	
 	// 오라클 주소
-	private String URL="jdbc:oracle:thin:@183.98.140.90:1521:XE";
+	private String URL="jdbc:oracle:thin:@localhost:1521:XE";
 	
 	// 드라이버 설정 ==> ojdbc8.jar
 	// 18c, 21c ==> ojdbc8.jar
