@@ -10,7 +10,7 @@ import java.sql.*;
 public class StudentDAO {
 	private Connection conn;
 	private CallableStatement cs;
-	private final String URL="jdbc:oracle:thin:@183.98.140.90:1521:XE";
+	private final String URL="jdbc:oracle:thin:@localhost:1521:XE";
 	
 	public StudentDAO() {
 		try {
