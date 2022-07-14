@@ -1,0 +1,72 @@
+<!-- 
+	margin 속성 =========> margin (margin:0px auto) : 가운데 정렬
+		=> margin-top
+		   margin-right
+		   margin-bottom
+		   margin-left
+		=> 4개 동시 margin   
+	padding 속성
+		=> padding-top
+		   padding-right
+		   padding-bottom
+		   padding-left
+		=> 4개 동시 padding   
+	border 속성
+		=> border-width
+		   border-style: solid, dotted, dashed, double, ...
+		   border-color: 지정된 색상(red, black, ...)
+		   				 (rgb(255,255,200), $CCC, ...)
+		   				 rgba() => 투명화
+		   border-radius: 타원형
+	
+	width
+	height
+	
+	----------------------------------------
+	위치 지정 : top, bottom, left, right
+	----------------------------------------
+	
+	가상 선택자 => :hover, :nth-child, ::after, ::before, ...
+	
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+div{
+	width: 300px;
+	height: 300px;
+	display: inline-block;	/* width, height 지정하면 inline 작동x => inline-block 작동 */
+}
+.box1{
+	margin: 30px 50px;		/* => 30px 50px 30px 50px */
+	background-color: yellow;
+}
+.box2{
+	margin: 30px 50px 30px;		/* => 30px 50px 30px 50px */
+	background-color: red;
+}
+.box3{
+	margin: 30px;		/* => 30px 30px 30px 30px */
+	background-color: blue;
+}
+.box4{
+	margin: 30px 50px 30px 50px;		/* => 30px 50px 30px 50px */
+	background-color: cyan;
+}
+.box5{
+	margin: 30px 30px 50px;		/* => 30px 30px 50px 30px */
+	background-color: green;
+}
+</style>
+</head>
+<body>
+   <div class="box1"></div>
+   <div class="box2"></div>
+   <div class="box3"></div>
+   <div class="box4"></div>
+   <div class="box5"></div>
+</body>
+</html>
