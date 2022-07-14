@@ -4,16 +4,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import com.sist.dao.BrandDAO;
+import com.sist.vo.BrandVO;
 
 
 public class BrandData {
@@ -33,31 +32,42 @@ public class BrandData {
         
         WebDriver driver = new ChromeDriver(options);
     	
-//    	KreamDAO dao=new KreamDAO();
-//    	ArrayList<KreamVO> list=new ArrayList<KreamVO>();
+    	BrandDAO dao=new BrandDAO();
+    	ArrayList<BrandVO> list=new ArrayList<BrandVO>();
     	
     	 try {
-             String url = "https://kream.co.kr/search?category_id=34&sort=popular&per_page=40";
+             String url = "https://kream.co.kr/";
              driver.get(url);
 
-            	 List<WebElement> el = driver.findElements(By.className("menu"));
-            	 for (WebElement li:el) {
+//            	 List<WebElement> el = driver.findElements(By.className("menu"));
+//            	 for (WebElement li:el) {
+                	for (int i=1; i<=3; i++) {
+                		for (int j=1; j<=5; j++) {
+                			String logo = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[1]/div[2]/div[4]/div[2]/div["+i+"]/div["+j+"]/div/picture/img")).getAttribute("src");
+                			String name = driver.findElement(By.xpath("//*[@id='__layout']/div/div[2]/div[1]/div[2]/div[4]/div[2]/div["+i+"]/div["+j+"]/p")).getText();
+                			System.out.println(++bno+". ");
+                			System.out.println(name);         
+                			System.out.println(logo);  
+                			
+         				   BrandVO b=new BrandVO();
+        				   
+        				   b.setBno(bno);
+        				   b.setLogo(logo);
+        				   b.setName(name);
+        				   
+        				   list.add(b);
+        				   dao.BrandInsert(b);
+                		}
+                	}
                 	
-                	String name = li.findElement(By.className("link_text")).getText();
 
-                	
-                   System.out.println(++bno+". ");
-//                   System.out.print(element.findElement(By.tagName("img")).getAttribute("src"));
-                   System.out.print("|"+li.findElement(By.className("link_text")).getText());         
-
-                   System.out.println();
                    
-//				   KreamVO k=new KreamVO();
+//				   BrandVO b=new BrandVO();
 //				   
-//				   k.setBrand(brand);
-//				   k.setName(name);
-//				   k.setAmount(amount);
-//				   k.setDesc(desc);
+//				   b.setBno(bno);
+//				   b.setLogo(logo);
+//				   b.setName(name);
+//				   b.setDesc(desc);
 //				   k.setKno(kno);
 ////				   k.setImg(element.findElement(By.tagName("img")).getAttribute("src"));
 //				   k.setBrand(element.findElement(By.className("brand")).getText());
@@ -75,7 +85,7 @@ public class BrandData {
 				   
 //				   list.add(k);
                    
-                }
+//                }
           
              
                
@@ -86,14 +96,14 @@ public class BrandData {
     	
     
     			
-//    			FileOutputStream fos=
-//    					new FileOutputStream("c:\\java_data\\kream.txt");
-//    			ObjectOutputStream oos=
-//    					new ObjectOutputStream(fos);
-//    			oos.writeObject(list);
-//    			oos.close();
-//    			fos.close();
-//    			System.out.println("데이터 저장 완료!!");
+    			FileOutputStream fos=
+    					new FileOutputStream("c:\\java_data\\brand.txt");
+    			ObjectOutputStream oos=
+    					new ObjectOutputStream(fos);
+    			oos.writeObject(list);
+    			oos.close();
+    			fos.close();
+    			System.out.println("데이터 저장 완료!!");
     
     }
 	public static void main(String[] args) throws InterruptedException, IOException {

@@ -3,8 +3,8 @@ package com.sist.vo;
 import java.io.Serializable;
 
 public class StyleVO implements Serializable {
-	private int sno;
-	private String picture, profile, nickname, content, like, reply,
+	private int sno, like_count, reply_count;
+	private String picture, profile, nickname, content,
 				poster, name, price;
 	
 	public int getSno() {
@@ -37,17 +37,17 @@ public class StyleVO implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getLike() {
-		return like;
+	public int getLike_Count() {
+		return like_count;
 	}
-	public void setLike(String like) {
-		this.like = like;
+	public void setLike_Count(int like_count) {
+		this.like_count = like_count;
 	}
-	public String getReply() {
-		return reply;
+	public int getReply_Count() {
+		return reply_count;
 	}
-	public void setReply(String reply) {
-		this.reply = reply;
+	public void setReply_Count(int reply_count) {
+		this.reply_count = reply_count;
 	}
 	public String getPoster() {
 		return poster;

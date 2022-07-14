@@ -34,12 +34,23 @@ public class StyleData {
              String url = "https://kream.co.kr/social/trending";
              driver.get(url);
 
-            	 List<WebElement> el = driver.findElements(By.className("card_detail"));
-            	 for (WebElement li:el) {
-                	
-                	String nickname = li.findElement(By.className("user_name")).getText();
-                	String content = li.findElement(By.className("text_box")).getText();
-                	String like = li.findElement(By.className("like_count")).getText(); 
+//			 SNO                                       NOT NULL NUMBER
+//			 PICTURE                                   NOT NULL VARCHAR2(500)
+//			 PROFILE                                            VARCHAR2(500)
+//			 NICKNAME                                           VARCHAR2(20)
+//			 CONTENT                                   NOT NULL VARCHAR2(1000)
+//			 LIKE_COUNT                                         NUMBER
+//			 REPLY_COUNT                                        NUMBER
+//			 POSTER                                    NOT NULL VARCHAR2(500)
+//			 NAME                                      NOT NULL VARCHAR2(200)
+//			 PRICE                                              VARCHAR2(20)
+             
+//            	 List<WebElement> el = driver.findElements(By.className("card_detail"));
+//            	 for (WebElement li:el) {
+//                	
+//                	String nickname = li.findElement(By.className("user_name")).getText();
+//                	String content = li.findElement(By.className("text_box")).getText();
+//                	String like = li.findElement(By.className("like_count")).getText(); 
                 	
 //                	int reply = Integer.parseInt(li.findElement(By.className("comment_count")).getText());
 //                	
@@ -48,12 +59,47 @@ public class StyleData {
 //                	} else {
 //                		reply=0;
 //                	}
+//         	for (int i=1; i<=3; i++) {
+        		for (int i=2; i<=19; i++) {
+        			String nickname = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div/div[2]/div[1]/div["+i+"]/a/div[1]/div[2]/div[1]/p")).getText();
+        			String content;
+        			try {
+        				content = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div/div[2]/div[1]/div["+i+"]/a/div[1]/div[2]/p")).getText();
+        			} catch(Exception ex) {content = " ";}
+        			int like_count = Integer.parseInt(driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div["+i+"]/a/div[1]/div[2]/div[2]/a[1]/span")).getText());
+        			int reply_count;
+        			try {
+        				reply_count = Integer.parseInt(driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div["+i+"]/a/div/div[2]/div[2]/a[2]/span")).getText());
+        			} catch(Exception ex) {reply_count=0;}
+        			String name;
+        			for (int j=1; j<=3; j++ ) {
+        				try {
+        					name = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div["+i+"]/a/div[1]/div[2]/div[3]/ul/li["+j+"]/a/div[2]/p")).getText();
+//        					name = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div[3]/a/div/div[2]/div[3]/ul/li/a/div[2]/p")).getText();
+//        					name = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div[4]/a/div[1]/div[2]/div[3]/ul/li/a/div[2]/p")).getText();
+        				} catch(Exception ex) {name="";}
+//        			String name = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div[2]/a/div[1]/div[2]/div[3]/ul/li[2]/a/div[2]/p")).getText();
+//        			String name = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div[3]/a/div/div[2]/div[3]/ul/li/a/div[2]/p")).getText();
+//        			String name = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div[2]/div[2]/div[1]/div[4]/a/div[1]/div[2]/div[3]/ul/li/a/div[2]/p")).getText();
+        			
+        				System.out.println(name);         
+        			}
+        			System.out.println(++sno+". ");
+        			System.out.println(nickname);         
+        			System.out.println(content);         
+        			System.out.println(like_count);         
+        			System.out.println(reply_count);         
+//        			String nickname = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div/div[2]/div[1]/div[4]/a/div[1]/div[2]/div[1]/p")).getText();
+//        			String nickname = driver.findElement(By.xpath("//*[@id=\"__layout\"]/div/div[2]/div/div[2]/div[1]/div[5]/a/div[1]/div[2]/div[1]/p")).getText();
+//        			String content = driver.findElement(By.xpath("//*[@id='__layout']/div/div[2]/div[1]/div[2]/div[4]/div[2]/div["+i+"]/div["+j+"]/p")).getText();
+//        			System.out.println(logo); 
                 	
-                   System.out.println(++sno+". ");
+//                   System.out.println(++sno+". ");
+//                   System.out.println("|"+nickname);
 //                   System.out.print(element.findElement(By.tagName("img")).getAttribute("src"));
-                   System.out.print("|"+li.findElement(By.className("user_name")).getText());         
-                   System.out.print("|"+li.findElement(By.className("like_count")).getText());         
-                   System.out.print("|"+content);         
+//                   System.out.print("|"+li.findElement(By.className("user_name")).getText());         
+//                   System.out.print("|"+li.findElement(By.className("like_count")).getText());         
+//                   System.out.print("|"+content);         
 //                   System.out.print("|"+reply);         
 
                    System.out.println();
