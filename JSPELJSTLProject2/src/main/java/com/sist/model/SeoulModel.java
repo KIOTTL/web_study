@@ -1,0 +1,45 @@
+package com.sist.model;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.sist.dao.LocationDAO;
+import com.sist.dao.LocationVO;
+
+// EL / JSTL ==> MVC용 ==> JSP에서 자바 코딩 최소화
+
+public class SeoulModel {
+	public void locationListData(HttpServletRequest request) {
+		LocationDAO dao = new LocationDAO();
+		String strPage=request.getParameter("page");
+		if(strPage==null)
+			strPage="1";
+		int curpage=Integer.parseInt(strPage);
+		List<LocationVO> list=dao.locationListData(curpage);
+		
+		// 총페이지
+		int totalpage=dao.locationTotalPage();
+		
+		final int BLOCK=5;
+		int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+		int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+		
+		if (endPage>totalpage)
+			endPage=totalpage;
+		
+		request.setAttribute("curpage", curpage);
+		request.setAttribute("totalpage", totalpage);
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
+		
+		request.setAttribute("list", list);
+	}
+	
+	public void locationDetailData(HttpServletRequest request) {
+		LocationDAO dao = new LocationDAO();
+		String no=request.getParameter("no");
+		LocationVO vo=dao.locationDetailData(Integer.parseInt(no));
+		request.setAttribute("vo", vo);
+	}
+}
