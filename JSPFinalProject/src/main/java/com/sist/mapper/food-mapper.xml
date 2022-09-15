@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.food-mapper">
+  <!-- 맛집 카테고리 -->
+  <select id="foodCategoryData" resultType="FoodCategoryVO">
+    <!-- 
+    	List<FoodCategoryVO> = selectList
+    	FoodCategoryVO  	 = selectOne  
+    	
+    	1. sql
+    	2. ? ==> parameterType
+    	3. 결과값 (VO, String, int, ...) resultType                                                             
+     -->
+     SELECT cno, title, subject, poster
+     FROM food_category
+  </select>
+  <!-- 카테고리별 맛집 -->
+  <select id="foodListData" resultType="FoodVO" parameterType="int">	<!-- parameterType => #{cno} 데이터형 => ?값 -->
+    SELECT fno, poster, name, tel, type, address, score
+    FROM food_house
+    WHERE cno=#{cno}
+  </select>
+  <select id="foodCategoryInfoData" resultType="FoodCategoryVO" parameterType="int">
+    SELECT title, subject
+    FROM food_category
+    WHERE cno=#{cno}
+  </select>
+  
+  <!-- 상세보기 -->
+  <select id="foodDetailData" resultType="FoodVO" parameterType="int">
+    SELECT * FROM food_house
+    WHERE fno=#{fno}
+  </select>
+  
+  <!-- 지역별 맛집 검색 -->
+  <select id="foodLocationFindData" resultType="FoodVO" parameterType="hashmap">
+    SELECT fno, name, score, poster, type, address, num
+    FROM (SELECT fno, name, score, poster, type, address, rownum as num
+    FROM (SELECT fno, name, score, poster, type, address
+    FROM food_location WHERE address LIKE '%'||#{address}||'%' ORDER BY fno ASC))
+    WHERE num BETWEEN #{start} AND #{end}
+  </select>
+  <select id="foodLocationFindTotalPage" resultType="int" parameterType="string">
+    SELECT CEIL(COUNT(*)/12.0) FROM food_location
+    WHERE address LIKE '%'||#{address}||'%'
+  </select>
+  
+  <!-- 찜하기 -->
+  <insert id="foodJjimInsert" parameterType="com.sist.vo.JjimVO">
+    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(no)+1,1) as no FROM jjim
+    </selectKey>
+    INSERT INTO jjim VALUES(#{no},#{id},#{fno})
+  </insert>
+  
+  <!-- 찜 여부 확인 -->
+  <select id="foodJjimCount" resultType="int" parameterType="com.sist.vo.JjimVO">
+    SELECT COUNT(*) FROM jjim
+    WHERE fno=#{fno} AND id=#{id}
+  </select>
+  
+  <!-- 찜 출력 (마이페이지) : forEach -->
+  <select id="foodJjimListData" resultType="FoodVO" parameterType="int">
+    SELECT * FROM food_house
+    WHERE fno=#{fno}
+  </select>
+  
+  <select id="foodJjimGetFno" resultType="int" parameterType="string">
+    SELECT fno FROM Jjim
+    WHERE id=#{id}
+  </select>
+  
+  <!-- 찜 취소 -->
+  <delete id="foodJjimDelete" parameterType="com.sist.vo.JjimVO">
+    DELETE FROM Jjim
+    WHERE id=#{id} AND fno=#{fno}
+  </delete>
+  
+  <!-- 닭 | 오리 요리 -->
+  <!-- 
+  		SELECT * FROM recipe
+  		WHERE REGEXP_LIKE(title,'닭|오리');
+  		
+  		SELECT * FROM recipe
+  		WHERE title LIKE '%닭%' OR title LIKE '%오리%';
+  		
+  		REGEXP_LIKE(컬럼명,'regex')
+  		 정규식
+  		  [] = 범위 => [A-C] A,B,C
+  		  {} = 개수 => [A-X]{1,3} A AA AAA
+  		  			  [0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3} IP (211.63.89.131)
+  		  ^[A-Z] : 알파벳 시작
+  		  [^A-Z] : 알파벳 제외
+  		  [A-Z]$ : 알파벳 종료
+  		  [A-Z]+ : 알파벳 1개 이상
+  		  [A-Z]* : 알파벳 0개 이상			  
+  		
+  		#{type} : '닭|오리' ==> ''(o)
+  		${type} : 닭|오리   ==> ''(x)
+   -->
+  <select id="foodRecipeMakeData" resultType="RecipeVO" parameterType="string">
+    SELECT no, title, poster, chef, rownum
+    FROM recipe
+    WHERE REGEXP_LIKE(title,#{type})
+    AND rownum&lt;=5
+  </select>
+</mapper>
