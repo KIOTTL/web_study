@@ -1,0 +1,43 @@
+<!-- 
+	CSS : HTML 내용과 상관없이 디자인을 바꿀 수 있다
+	종류)
+		1. 외부 CSS => 파일로 제작 (.css) => 모든 파일에 적용할 때
+		2. 내부 CSS => HTML 한 개의 파일 안에 설정
+		   <head>
+		      <style>
+		           
+		      </style>
+		   </head>
+		3. 인라인 CSS => 태그 한 개에 대해 처리
+		4. 같은 태그를 다른 곳에서 제어 => 오버라이딩이 된다
+		
+	사용법)
+		- 태크명 {
+			속성:값;
+			속성:값;
+			속성:값;
+			/* 주석 */
+		  }
+	
+	선택자) JQuery, JavaSvript, Jsoup, Vue, React
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+h1 {
+	color:red; /* 글자 색상 */
+	background-color:yellow; /* 바탕색 */
+}
+h2 {
+	text-align: center; /* 가운데 정렬 */
+}
+</style>
+</head>
+<body>
+   <h1>Hello CSS</h1>
+   <h2>Hello CSS</h2>
+</body>
+</html>
