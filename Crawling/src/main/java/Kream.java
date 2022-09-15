@@ -53,10 +53,25 @@ public class Kream {
 				}
 			}
 	        
-		} finally {
+		} catch(Exception ex) {} 
+		finally {
 			driver.close();
 			driver.quit();
 		}
+		
+//		try {
+//			//드라이버가 null이 아니라면
+//			if(driver != null) {
+//				//드라이버 연결 종료
+//				driver.close(); //드라이버 연결 해제
+//				
+//				//프로세스 종료
+//				driver.quit();
+//			}
+//		} catch (Exception e) {
+//			throw new RuntimeException(e.getMessage());
+//		}
+		
 	}
 
 }

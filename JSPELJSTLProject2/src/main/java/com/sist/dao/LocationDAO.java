@@ -115,6 +115,90 @@ public class LocationDAO {
 		return vo;
 	}
 	
+	// nature
+	public List<LocationVO> natureListData(int page){
+		List<LocationVO> list = new ArrayList<LocationVO>();
+		try {
+			getConnection();
+			String sql="SELECT no, title, poster, num "
+					+"FROM (SELECT no, title, poster, rownum as num "
+					+"FROM (SELECT no, title, poster "
+					+"FROM seoul_nature ORDER BY no ASC)) "
+					+"WHERE num BETWEEN ? AND ?";
+			ps=conn.prepareStatement(sql);
+			int rowSize=12;
+			int start=(page*rowSize)-(rowSize-1);
+			int end=page*rowSize;
+			
+			ps.setInt(1, start);
+			ps.setInt(2, end);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				LocationVO vo=new LocationVO();
+				vo.setNo(rs.getInt(1));
+				vo.setTitle(rs.getString(2));
+				vo.setPoster(rs.getString(3));
+				
+				list.add(vo);
+			}
+			rs.close();
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			disConnection();
+		}
+		
+		return list;
+	}
+	
+	// 총페이지 구하기
+	public int natureTotalPage() {
+		int total=0;
+		try {
+			getConnection();
+			String sql="SELECT CEIL(COUNT(*)/12.0) FROM seoul_nature";
+			ps=conn.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			rs.next();
+			total=rs.getInt(1);
+			rs.close();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			disConnection();
+		}
+		
+		return total;
+	}
+	
+	public LocationVO natureDetailData(int no) {
+		LocationVO vo=new LocationVO();
+		try {
+			getConnection();
+			String sql="SELECT no, title, poster, msg, address "
+					+"FROM seoul_nature "
+					+"WHERE no=?";
+			ps=conn.prepareStatement(sql);
+			ps.setInt(1, no);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			vo.setNo(rs.getInt(1));
+			vo.setTitle(rs.getString(2));
+			vo.setPoster(rs.getString(3));
+			vo.setMsg(rs.getString(4));
+			vo.setAddress(rs.getString(5));
+			rs.close();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			disConnection();
+		}
+		
+		return vo;
+	}
+	
 }
 
 
