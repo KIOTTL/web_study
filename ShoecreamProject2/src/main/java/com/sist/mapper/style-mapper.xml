@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.style-mapper">
+<!-- 
+ID       NOT NULL NUMBER         
+IMG      NOT NULL VARCHAR2(2000) 
+CONTENT  NOT NULL CLOB           
+RGDATE   NOT NULL DATE           
+BOOKMARK          NUMBER         
+USER_ID  NOT NULL NUMBER  
+ -->
+  <!-- 목록 출력 -->
+  <!-- <select id="styleListData" resultType="StyleVO" parameterType="hashmap">
+    SELECT id, img, content, TO_CHAR(rgdate, 'YYYY-MM-DD HH24:MI:SS') as dbday, bookmark, user_id, rcount, num
+    FROM (SELECT id, img, content, rgdate, bookmark, user_id, rcount, rownum as num
+    FROM (SELECT /*+ INDEX_ASC(style_2 pk_style_2)*/ id, img, content, rgdate, bookmark, user_id, rcount
+    FROM style_2)) WHERE num BETWEEN #{start} AND #{end} ORDER BY id desc
+  </select> -->
+   <select id="styleListData" resultType="StyleVO" parameterType="hashmap">
+    SELECT id, img, content, TO_CHAR(rgdate, 'YYYY-MM-DD HH24:MI:SS') as dbday, bookmark, (SELECT email FROM user_2 WHERE id=user_id) as email, rcount, num
+    FROM (SELECT id, img, content, rgdate, bookmark, user_id, rcount, rownum as num
+    FROM (SELECT /*+ INDEX_ASC(style_2 pk_style_2)*/ id, img, content, rgdate, bookmark, user_id, rcount
+    FROM style_2)) WHERE num BETWEEN #{start} AND #{end} ORDER BY id desc
+  </select>
+  <select id="styleListDataPop" resultType="StyleVO" parameterType="hashmap">
+    SELECT id, img, content, TO_CHAR(rgdate, 'YYYY-MM-DD HH24:MI:SS') as dbday, bookmark, (SELECT email FROM user_2 WHERE id=user_id) as email, rcount, num
+    FROM (SELECT id, img, content, rgdate, bookmark, user_id, rcount, rownum as num
+    FROM (SELECT /*+ INDEX_ASC(style_2 pk_style_2)*/ id, img, content, rgdate, bookmark, user_id, rcount
+    FROM style_2 ORDER BY bookmark desc, rcount desc)) WHERE num BETWEEN #{start} AND #{end}
+  </select>
+  
+  <!-- 페이징 -->
+  <select id="styleTotalPage" resultType="int">
+    SELECT CEIL(COUNT(*)/8.0) FROM style_2
+  </select>
+ 
+   <select id="styleGetEmail" resultType="MemberVO" parameterType="string">
+    SELECT * FROM memberVO
+    WHERE id=#{user_id}
+  </select>
+ 
+  <!-- 삽입 --> 
+  <insert id="styleInsert" parameterType="StyleVO">
+    <!-- INSERT INTO style_2(id, content, img, user_id) 
+    VALUES ((SELECT NVL(MAX(id)+1,1) FROM style_2),
+    #{content}, #{img}, (SELECT NVL(MAX(user_id)+1,1) FROM style_2)) -->
+    INSERT INTO style_2(id, content, img, user_id) 
+    VALUES ((SELECT NVL(MAX(id)+1,1) FROM style_2),
+    #{content}, #{img}, (SELECT id FROM user_2 WHERE email=#{email}))
+  </insert>
+  
+  <!-- 조회수 올리기 -->
+<!--   <update id="hitIncrement" parameterType="int">
+    UPDATE project_freeboard SET
+    hit=hit+1
+    WHERE no=#{no}
+  </update>  --> 
+  
+  <!-- 상세보기 -->
+  <select id="styleDetailData" resultType="StyleVO" parameterType="int">
+    SELECT id, img, content, TO_CHAR(rgdate, 'YYYY-MM-DD HH24:MI:SS') as dbday, bookmark, user_id, (SELECT email FROM user_2 WHERE id=user_id) as email, rcount
+    FROM style_2
+    WHERE id=#{id}
+  </select>
+<!--   <select id="styleDetailData" resultType="StyleVO" parameterType="int">
+    SELECT id, img, content, TO_CHAR(rgdate, 'YYYY-MM-DD HH24:MI:SS') as dbday, bookmark, (SELECT email FROM user_2 WHERE id=user_id) as email, rcount
+    FROM style_2
+    WHERE id=#{id}
+  </select> -->
+  
+  <!-- 태그 -->
+  <select id="styleTagData" resultType="StyleVO" parameterType="string">
+     SELECT *
+     FROM style_2
+     WHERE UPPER(content) LIKE UPPER('%'||#{tag}||'%')
+     ORDER BY id DESC
+   </select>
+   
+   <!-- 좋아요 -->
+  <insert id="styleLikesInsert" parameterType="com.sist.vo.StyleLikesVO">
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(id)+1,1) as id FROM style_likes_2
+    </selectKey>
+    INSERT INTO style_likes_2 VALUES(#{id},#{user_id},#{sid})
+  </insert>
+  <update id="likesIncrement" parameterType="StyleVO">
+    UPDATE style_2 SET
+    bookmark=bookmark+1
+    WHERE id=#{sid}
+  </update>
+  <update id="likesDecrement" parameterType="StyleVO">
+    UPDATE style_2 SET
+    bookmark=bookmark-1
+    WHERE id=#{sid}
+  </update>
+  
+  <!-- 좋아요 여부 확인 -->
+  <select id="styleLikesCount" resultType="int" parameterType="com.sist.vo.StyleLikesVO">
+    SELECT COUNT(*) FROM style_likes_2
+    WHERE user_id=#{user_id} AND sid=#{sid}
+  </select>
+  
+  <!-- 좋아요 취소 -->
+  <delete id="styleLikesDelete" parameterType="com.sist.vo.StyleLikesVO">
+    DELETE FROM style_likes_2
+    WHERE user_id=#{user_id} AND sid=#{sid}
+  </delete>
+  
+  <!-- 수정 -->
+  <update id="styleUpdate" parameterType="StyleVO">
+    UPDATE style_2 SET
+    content=#{content}
+    WHERE id=#{id}
+  </update>
+  
+  <!-- 삭제 -->
+  <delete id="styleDelete" parameterType="int">
+    DELETE FROM style_2
+    WHERE id=#{id}
+  </delete>
+  
+  <!-- 마이페이지 작성 글 -->
+  <select id="mypageStyle" resultType="StyleVO" parameterType="hashmap">
+  	SELECT id, img, content, bookmark, rcount, num
+    FROM (SELECT id, img, content, bookmark, rcount, rownum as num
+    FROM (SELECT /*+ INDEX_ASC(style_2 pk_style_2)*/ id, img, content, bookmark, rcount
+    FROM style_2 WHERE user_id=#{user_id} ORDER BY rgdate DESC)) WHERE num BETWEEN #{start} AND #{end}
+  
+    <!-- SELECT * FROM style_2
+    WHERE user_id=#{user_id}
+    ORDER BY rgdate DESC -->
+  </select>
+  
+  <!-- 마이페이지 페이징 -->
+  <select id="mypageStyleTotalPage" resultType="int" parameterType="int">
+    SELECT CEIL(COUNT(*)/8.0) FROM style_2
+    WHERE user_id=#{user_id}
+  </select>
+  
+  <select id="mypageStyleLikes" resultType="StyleVO" parameterType="int">
+  	SELECT id,
+      (SELECT img FROM style_2 WHERE id=style_likes_2.sid) as img,
+      (SELECT content FROM style_2 WHERE id=style_likes_2.sid) as content,
+      (SELECT bookmark FROM style_2 WHERE id=style_likes_2.sid) as bookmark,
+      (SELECT rcount FROM style_2 WHERE id=style_likes_2.sid) as rcount,
+      (SELECT email FROM user_2 WHERE ((SELECT user_id FROM style_2 WHERE id=style_likes_2.sid))=id) as email
+    FROM style_likes_2
+    WHERE user_id=#{user_id}
+  </select>
+  
+</mapper>

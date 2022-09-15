@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.shoes-mapper">
+  <!-- 메인 카테고리 -->
+  <select id="shoesPopListData" resultType="ShoesVO">
+	SELECT *
+    FROM goods_2
+    WHERE bookmark IS NOT NULL
+    ORDER BY bookmark desc
+  </select>
+  <select id="shoesNewListData" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+    WHERE release_date BETWEEN TO_DATE('2022-06-01', 'YYYY-MM-DD') 
+                   AND TO_DATE('2022-07-31', 'YYYY-MM-DD') ORDER BY release_date DESC
+  </select>
+  <select id="shoesPreListData" resultType="ShoesVO">
+  	SELECT *
+    FROM goods_2
+    WHERE im_buy IS NOT NULL
+    ORDER BY im_buy desc
+  </select>
+  
+  <!-- 브랜드별 목록 -->
+  <select id="shoesBrandListData" resultType="ShoesVO" parameterType="String">
+    SELECT *
+    FROM goods_2
+    WHERE brand=#{brand}
+  </select>
+  
+  <!-- 상세보기 -->
+  <select id="shoesDetailData" resultType="ShoesVO" parameterType="int">
+    SELECT * 
+    FROM goods_2
+    WHERE id=#{goods_id}
+  </select>
+  
+  <!-- 검색 -->
+  <select id="shoesFindData" resultType="ShoesVO" parameterType="map">
+     <!-- SELECT *
+     FROM goods_2
+     WHERE UPPER(brand) LIKE UPPER('%'||#{brand}||'%')
+     OR UPPER(name_eng) LIKE UPPER('%'||#{name_eng}||'%')
+     OR UPPER(name_kor) LIKE UPPER('%'||#{name_kor}||'%')
+     AND num BETWEEN #{start} AND #{end}
+     ORDER BY bookmark DESC NULLS LAST -->
+    SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, rownum as num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark
+    FROM goods_2
+    WHERE UPPER(brand) LIKE UPPER('%'||#{brand}||'%')
+    OR UPPER(name_eng) LIKE UPPER('%'||#{name_eng}||'%')
+    OR UPPER(name_kor) LIKE UPPER('%'||#{name_kor}||'%') ORDER BY bookmark DESC NULLS LAST))
+    WHERE num BETWEEN #{start} AND #{end}
+   </select>
+   
+  <!-- 검색 전체 페이지 -->
+  <select id="findTotalPage" resultType="int" parameterType="string">
+   SELECT CEIL(COUNT(*)/12.0)
+   FROM goods_2
+   WHERE UPPER(brand) LIKE UPPER('%'||#{brand}||'%')
+   OR UPPER(name_eng) LIKE UPPER('%'||#{name_eng}||'%')
+   OR UPPER(name_kor) LIKE UPPER('%'||#{name_kor}||'%')
+   ORDER BY bookmark DESC NULLS LAST
+ </select>
+   
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.nav-mapper">
+  <!-- New -->
+  <select id="navNewList" resultType="ShoesVO" parameterType="hashmap">
+    SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, rownum as num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark
+    FROM goods_2 WHERE release_date BETWEEN TO_DATE('2022-06-01', 'YYYY-MM-DD') 
+                   AND TO_DATE('2022-07-31', 'YYYY-MM-DD') ORDER BY release_date DESC ))
+    WHERE num BETWEEN #{start} AND #{end}
+    
+   </select>
+  
+  <!-- Men -->
+  <select id="navMenList" resultType="ShoesVO" parameterType="hashmap">
+    SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, rownum as num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark
+    FROM goods_2 WHERE type='남자'))
+    WHERE num BETWEEN #{start} AND #{end}
+  </select>
+  
+  <!-- Women -->
+  <select id="navWomenList" resultType="ShoesVO">
+    SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark, rownum as num
+    FROM (SELECT id, brand, name_kor, name_eng, img, im_buy, bookmark
+    FROM goods_2 WHERE type='여자'))
+    WHERE num BETWEEN #{start} AND #{end}
+  </select>
+  
+  <!-- Kids -->
+  <select id="navKidsList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+    WHERE type='키즈'
+  </select>
+  
+  <!-- Style -->
+  <select id="navStyleList" resultType="StyleVO">
+    SELECT *
+    FROM style_2
+    ORDER BY id DESC
+  </select>
+  
+  <!-- Brand -->
+  <select id="navBrandList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+  </select>
+  
+  <!-- Calendar -->
+  <select id="navCalendarList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+  </select>
+  
+  <!-- new 전체 페이지 -->
+  <select id="navTotalPage" resultType="int">
+   SELECT CEIL(COUNT(*)/12.0)
+   FROM goods_2
+   WHERE release_date BETWEEN TO_DATE('2022-06-01', 'YYYY-MM-DD') 
+                   AND TO_DATE('2022-07-31', 'YYYY-MM-DD')
+ </select>
+ 
+  <!-- men 전체 페이지 -->
+  <select id="navTotalPage2" resultType="int">
+   SELECT CEIL(COUNT(*)/12.0)
+   FROM goods_2
+   WHERE type='남자'
+ </select>
+ 
+  <!-- women 전체 페이지 -->
+  <select id="navTotalPage3" resultType="int">
+   SELECT CEIL(COUNT(*)/12.0)
+   FROM goods_2
+   WHERE type='여자'
+ </select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.nav-mapper">
+  <!-- New -->
+  <select id="navNewList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+    WHERE release_date>=SYSDATE
+  </select>
+  
+  <!-- Men -->
+  <select id="navMenList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+    WHERE type='남자'
+  </select>
+  
+  <!-- Women -->
+  <select id="navWomenList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+    WHERE type='여자'
+  </select>
+  
+  <!-- Kids -->
+  <select id="navKidsList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+    WHERE type='키즈'
+  </select>
+  
+  <!-- Style -->
+  <select id="navStyleList" resultType="StyleVO">
+    SELECT *
+    FROM style_2
+  </select>
+  
+  <!-- Brand -->
+  <select id="navBrandList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+  </select>
+  
+  <!-- Calendar -->
+  <select id="navCalendarList" resultType="ShoesVO">
+    SELECT *
+    FROM goods_2
+  </select>
+</mapper>

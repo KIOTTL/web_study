@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+#nav {
+	z-index:2;
+    height: 60px;
+    width: 100%;
+    background-color: black;
+    position: fixed;
+    margin: 60px auto 0 auto;
+    left: 0;
+    right: 0;
+}
+
+#nav_ul {
+    min-width: 700px;
+    width: 70%;
+    margin: 0 auto;
+    line-height: 60px;   
+}
+
+#nav_li {
+    list-style: none;  /*<li> 태그는 위의 이미지처럼 목록을 나타내는 점을 없앤다 */
+    float: left; /*<li>태그들이 왼쪽에 흐르게 설정(그러면 아래있는 내용은 오른쪽으로 옴)*/
+    vertical-align: middle; /* 세로 정렬을 가운데로 설정(위의 line-height와 같이 설정 필요함)*/
+    text-align: center;     /*글씨 정렬을 가운데로 설정*/
+    color: white;
+}
+
+#nav a {
+    text-decoration: none;
+    color: white;
+    width: 110px;
+    display: block;
+}
+
+#nav .NEW {
+    color: red;
+    font-weight: 600;
+}

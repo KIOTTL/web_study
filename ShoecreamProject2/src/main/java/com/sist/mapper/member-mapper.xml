@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.member-mapper">
+
+  <!-- 아이디 중복체크 (count가 0이면 중복x) -->
+  <select id="memberEmailCheck" resultType="int" parameterType="string">
+    SELECT COUNT(*) FROM user_2
+    WHERE email=#{email} 
+  </select>
+	
+  <!-- 전화번호 중복체크 -->
+  <select id="memberTelCheck" resultType="int" parameterType="string">
+    SELECT COUNT(*) FROM user_2
+    WHERE tel=#{tel} 
+  </select>
+  
+  <!-- 가입 -->
+  <insert id="memberInsert" parameterType="MemberVO">
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">
+      SELECT NVL(MAX(id)+1,1) as id FROM user_2
+    </selectKey>
+     INSERT INTO user_2(id, email, pwd, name,tel)
+     VALUES(
+       #{id},
+       #{email},
+       #{pwd},
+       #{name},
+       #{tel}
+     )
+  </insert>
+  
+  <!-- 로그인 -->
+  <!-- id 존재여부 확인 (0 => 없음, 1 => 있음) -->
+  <select id="memberEmailCount" resultType="int" parameterType="string">
+    SELECT COUNT(*)
+    FROM user_2
+    WHERE email=#{email}
+  </select>
+  <!-- 비밀번호 읽기 -->
+  <select id="memberInfoData" resultType="MemberVO" parameterType="string">
+    SELECT pwd, email, name
+    FROM user_2
+    WHERE email=#{email}
+  </select>
+  
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.likes-mapper">
+
+<!-- 좋아요 테이블에 추가 -->
+<insert id="likesInsert" parameterType="LikesVO">
+	<selectKey keyProperty="likes_id" resultType="int" order="BEFORE">
+		SELECT NVL(MAX(likes_id)+1, 1) as likes_id <!-- 자동 증가 번호 -->
+		FROM likes_2
+	</selectKey>
+	
+	INSERT INTO likes_2
+	VALUES(#{likes_id}, #{user_id}, #{goods_id})
+	
+	<!--  
+		likes_id : 좋아요 고유 번호
+		user_id : 회원 이름
+		goods_id : 상품 고유 번호
+	-->
+	
+</insert>
+
+<!-- 좋아요 여부 -->
+<select id="likesCount" resultType="int" parameterType="LikesVO">
+	SELECT COUNT(*) 
+	FROM likes_2
+	WHERE goods_id=#{goods_id} AND user_id=#{user_id} <!-- 상품 고유 번호와 좋아요한 회원의 존재 여부 -->
+</select>
+
+<!-- 좋아요 출력(마이 페이지) : forEach 사용 -->
+<!-- 마이페이지 좋아요 목록 출력 -->
+<select id="likesListData" resultType="LikesVO" parameterType="int">
+	SELECT *
+	FROM goods_2
+	WHERE goods_id=#{goods_id} <!-- 상품의 모든 데이터 가져옴 -->
+</select>
+<select id="likesGetGoodsId" resultType="int" parameterType="String">
+	SELECT goods_id
+	FROM likes_2
+	WHERE user_id=#{user_id} <!-- 회원이 좋아요한 게시글의 고유번호 가져옴 -->
+</select>
+
+<!-- 좋아요 취소 -->
+<delete id="likesDelete" parameterType="LikesVO">
+	DELETE FROM likes_2
+	WHERE user_id=#{user_id} AND goods_id=#{goods_id} <!-- 회원 이름과 상품 고유번호 삭제 -->
+</delete>
+
+</mapper>

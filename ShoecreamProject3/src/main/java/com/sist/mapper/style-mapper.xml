@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.style-mapper">
+<!-- 
+ID       NOT NULL NUMBER         
+IMG      NOT NULL VARCHAR2(2000) 
+CONTENT  NOT NULL CLOB           
+RGDATE   NOT NULL DATE           
+BOOKMARK          NUMBER         
+USER_ID  NOT NULL NUMBER  
+ -->
+  <!-- 목록 출력 -->
+  <select id="styleListData" resultType="StyleVO">
+    SELECT id, img, content, TO_CHAR(rgdate,'YYYY-MM-DD') as dbday, bookmark, user_id, num
+    FROM (SELECT id, img, content, rgdate, bookmark, user_id, rownum as num
+    FROM (SELECT /*+ INDEX_ASC(style_2 pk_style_2)*/ id, img, content, rgdate, bookmark, user_id 
+    FROM style_2))
+  </select>
+  
+  <!-- 페이징 -->
+  <select id="styleTotalPage" resultType="int">
+    SELECT CEIL(COUNT(*)/9.0) FROM style_2
+  </select>
+ 
+  <!-- 삽입 --> 
+  <insert id="styleInsert" parameterType="StyleVO">
+    INSERT INTO style_2(id, content, img, user_id) 
+    VALUES ((SELECT NVL(MAX(id)+1,1) FROM style_2),
+    #{content}, #{img}, (SELECT NVL(MAX(user_id)+1,1) FROM style_2))
+  </insert>
+  
+  <!-- 조회수 올리기 -->
+<!--   <update id="hitIncrement" parameterType="int">
+    UPDATE project_freeboard SET
+    hit=hit+1
+    WHERE no=#{no}
+  </update>  --> 
+  
+  
+  
+</mapper>
