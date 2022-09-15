@@ -1,0 +1,55 @@
+<!-- 
+	자바스크립트
+		1. 변수
+		2. 연산자
+		3. 제어문
+		4. 함수
+		    기능 처리
+		    function func_name(매개변수) {
+		    	return 값
+		    }
+		    
+		    let func_name=function(){}
+		    let func_name=()=>
+		5. DOMScript
+			태그를 제어 => 태그 가지고 오기
+						document.querySelector("") => $("") => jquery
+		6. 라이브러리 (JQuery, VueJS, ReactJS, NodeJS)
+		            -------------- ----------------
+		                Front           Server Side(Spring)
+		                
+		JQuery
+		------ 자바스크립트 라이브러리
+		시작(main()) => 웹(window.onload)
+		
+		$(function(){ ==> window.onload
+			기능 처리
+		})
+		==> 라이브러리 로드
+			<script type="" src="원격..."></script>
+ -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script> <!-- 라이브러리 가져오기 -->
+<script type="text/javascript">
+// main==> window.onload=function(){}
+$(function(){
+	// selector => 태그 읽어오기 (태그 제어)
+	$('h1').css("color", "red");
+	$('#a').css("color", "blue");
+	$('#b').css("background-color", "yellow")
+	$('.c').css("color", "green")
+})
+</script>
+</head>
+<body>
+  <h1>Hello JQuery</h1>
+  <h1 id="a">Hello JQuery</h1>
+  <h1 id="b">Hello JQuery</h1>
+  <h1 class="c">Hello JQuery</h1>
+  <h1 class="c">Hello JQuery</h1>
+</body>
+</html>
