@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- 
+	Connection 관련 => getConnection, disConnection
+ -->
+<configuration>
+  <!-- 
+ 	 	properties?, settings?, typeAliases?, typeHandlers?, objectFactory?, 
+ 		objectWrapperFactory?, reflectorFactory?, plugins?, environments?, databaseIdProvider?, mappers?
+ 		
+ 		위 순서 잘 지키기, 열고 닫고 확인
+ 		<properties></properties> / <properties/>
+ 		
+ 		? = 0번 또는 1번 사용 (필요시에만 사용)
+ 		* = 0번 이상 (여러 번 사용 가능)
+ 		+ = 1번 이상 (반드시 한 번 이상 사용)
+ 		| = 선택
+ 		default = 1번 (반드시 한 번 사용)
+ 		
+ 		properties : 데이터베이스 정보 저장한 .properties파일 읽을 때 사용
+ 		settings : 캐시메모리 만들 때 사용
+ 		typeAliases : VO 등록
+ 		environments : connection => driver, username, password, url 
+ 		mappers : SQL 파일 위치
+   -->
+   <typeAliases>
+   <!-- (typeAlias*, package*) VO 등록
+     	   SQL문장 제작 => 실행, 결과값 받는 일 (MyBatis)
+   -->
+     <typeAlias type="com.sist.dao.MyBoardVO" alias="MyBoardVO"/>
+   </typeAliases>
+   <!-- 연결 (getConnection, disConnection) -->
+   <environments default="development">
+   <!-- (environment)+ => 1번 이상 반드시 사용 -->
+     <environment id="development">
+     <!-- (transactionManager,dataSource) => default : 반드시 한 번 사용 -->
+       <transactionManager type="JDBC"/>
+       <dataSource type="POOLED">
+       <!-- 
+         	POOLED : DBCP
+         	UNPOOLED : JDBC
+        -->
+          <property name="driver" value="oracle.jdbc.driver.OracleDriver"/>
+          <!-- Class.forName("oracle.jdbc.driver.OracleDriver") -->
+          <property name="url" value="jdbc:oracle:thin:@183.98.140.90:1521:XE"/>
+          <property name="username" value="hr"/>
+          <property name="password" value="happy"/>
+          <!-- 
+          	getConnection()
+          		=> conn=DriverManager.getConnection(url,username,password)
+           -->
+       </dataSource>
+     </environment>
+   </environments>
+   <mappers>
+     <!-- (mapper*, package*) -->
+     <mapper resource="com/sist/dao/board-mapper.xml"/> <!-- SQL 문장 저장 위치 -->
+   </mappers>
+</configuration>

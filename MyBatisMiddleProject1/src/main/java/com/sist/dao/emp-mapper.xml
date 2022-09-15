@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.dao.emp-mapper">
+  <!-- 
+  		SELECT empno, ename, job, mgr, hiredate, sal, comm, deptno, dname, loc
+  		FROM emp, dept
+  		WHERE emp.deptno=dept.deptno
+  		
+  		ResultSet rs=ps.executeQuery();
+  		while(rs.next()){
+  			EmpVO vo=new EmpVO();
+  			vo.setEmpno(rs.getInt("empno"));
+  			<result property="empno" column="empno"/>
+  			vo.getDvo().setDname(rs.getString("dname"))
+  		}
+   -->
+  <resultMap type="com.sist.dao.EmpVO" id="empMap">
+    <result property="dvo.dname" column="dname"/>
+    <result property="dvo.loc" column="loc"/>
+  </resultMap>
+  <!-- sql 태그 : 반복적인 SQL문장이 있는 경우 (JOIN, SUBQUERY) -->
+  <sql id="join-sql">
+    SELECT empno, ename, job, hiredate, sal, emp.deptno, dname, loc
+    FROM emp, dept
+    WHERE emp.deptno=dept.deptno
+  </sql>
+  <select id="empDeptJoinData" resultMap="empMap">
+    <include refid="join-sql"/>
+  </select>
+  <select id="empDeptDetailData" resultMap="empMap" parameterType="int">
+    <include refid="join-sql"/>
+    AND empno=#{empno}
+  </select>
+  <select id="empGetEnameData" resultType="string">
+    SELECT ename FROM emp
+  </select>
+  
+  <!-- 
+  		동적 쿼리
+  		AND ename IN('','','')
+  		String[] nameArr={"a", "b", "c", "d"};
+  		IN ('a', 'b', 'c', ...)
+  		
+  		DML => <select id="" resultType="" resultMap="" parameterType="">
+  			   <insert id="" parameterType="">
+  			   <update id="" parameterType="">
+  			   <delete id="" parameterType="">
+  		parameterType= : ?에 값 채우기 / resultMap : 사용자 정의 (컬럼명과 변수명이 다른 경우(as))
+  		select => JOIN
+  		
+  		동적 쿼리 => 사용자의 선택에 따라 달라짐
+   -->
+  <select id="empFindData" resultMap="empMap" parameterType="hashmap">
+    <include refid="join-sql"/>
+    AND ename 
+    <trim prefix="IN"> <!-- prefixOverrides="OR" : 지우기 -->
+      <foreach collection="nameArr" item="name" open="(" close=")" separator=",">#{name}</foreach>
+    </trim> 
+  </select>
+</mapper>
