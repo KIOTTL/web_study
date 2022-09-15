@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.shoes-mapper">
+  <!-- 메인 카테고리 -->
+  <select id="shoesPopListData" resultType="ShoesVO">
+	SELECT id, img, brand, name_eng, im_buy
+    FROM goods_2
+    WHERE bookmark IS NOT NULL
+    ORDER BY bookmark desc
+  </select>
+  <select id="shoesNewListData" resultType="ShoesVO">
+	SELECT id, img, brand, name_eng, im_buy, release_date
+    FROM goods_2
+    WHERE release_date IS NOT NULL
+    ORDER BY release_date desc
+  </select>
+  <select id="shoesPreListData" resultType="ShoesVO">
+  	SELECT id, img, brand, name_eng, im_buy, release_date
+    FROM goods_2
+    WHERE im_buy IS NOT NULL
+    ORDER BY im_buy desc
+  </select>
+  
+  <!-- 브랜드별 목록 -->
+  <select id="shoesBrandListData" resultType="ShoesVO" parameterType="String">
+    SELECT id, img, brand, name_eng, name_kor, im_buy
+    FROM goods_2
+    WHERE brand=#{brand}
+  </select>
+  
+  <!-- 상세보기 -->
+  <select id="shoesDetailData" resultType="ShoesVO" parameterType="int">
+    SELECT * FROM goods_2
+    WHERE id=#{id}
+  </select>
+</mapper>

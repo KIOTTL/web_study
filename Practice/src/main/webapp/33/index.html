@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <form id="todo-form" class="form">
+            <input required maxlength="10" type="text" placeholder="SEARCH">
+        </form>
+        <button type="submit" form="todo-form">제출하기</button>
+        <div class="todo-inner">
+            <div class="allDelete off">
+                <h2 class="tit">최근 검색어</h2>
+                <span class="btn">모두 지우기 ❌</span>
+            </div>
+            <p class="txt"></p>
+            <ul id="todo-list"></ul>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

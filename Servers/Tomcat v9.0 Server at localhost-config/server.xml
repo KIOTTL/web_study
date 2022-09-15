@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+--><!-- Note:  A "Server" is not itself a "Container", so you may not
+     define subcomponents such as "Valves" at this level.
+     Documentation at /docs/config/server.html
+ --><Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+  <!-- Security listener. Documentation at /docs/config/listeners.html
+  <Listener className="org.apache.catalina.security.SecurityListener" />
+  -->
+  <!-- APR library loader. Documentation at /docs/apr.html -->
+  <Listener SSLEngine="on" className="org.apache.catalina.core.AprLifecycleListener"/>
+  <!-- Prevent memory leaks due to use of particular java/javax APIs-->
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
+
+  <!-- Global JNDI resources
+       Documentation at /docs/jndi-resources-howto.html
+  -->
+  <GlobalNamingResources>
+    <!-- Editable user database that can also be used by
+         UserDatabaseRealm to authenticate users
+    -->
+    <Resource auth="Container" description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" name="UserDatabase" pathname="conf/tomcat-users.xml" type="org.apache.catalina.UserDatabase"/>
+  </GlobalNamingResources>
+
+  <!-- A "Service" is a collection of one or more "Connectors" that share
+       a single "Container" Note:  A "Service" is not itself a "Container",
+       so you may not define subcomponents such as "Valves" at this level.
+       Documentation at /docs/config/service.html
+   -->
+  <Service name="Catalina">
+
+    <!--The connectors can use a shared executor, you can define one or more named thread pools-->
+    <!--
+    <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"
+        maxThreads="150" minSpareThreads="4"/>
+    -->
+
+
+    <!-- A "Connector" represents an endpoint by which requests are received
+         and responses are returned. Documentation at :
+         Java HTTP Connector: /docs/config/http.html
+         Java AJP  Connector: /docs/config/ajp.html
+         APR (HTTP/AJP) Connector: /docs/apr.html
+         Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
+    -->
+    <Connector URIEncoding="UTF-8" connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443"/>
+    <!-- A "Connector" using the shared thread pool-->
+    <!--
+    <Connector executor="tomcatThreadPool"
+               port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+    -->
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443
+         This connector uses the NIO implementation. The default
+         SSLImplementation will depend on the presence of the APR/native
+         library and the useOpenSSL attribute of the AprLifecycleListener.
+         Either JSSE or OpenSSL style configuration may be used regardless of
+         the SSLImplementation selected. JSSE style configuration is used below.
+    -->
+    <!--
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               maxThreads="150" SSLEnabled="true">
+        <SSLHostConfig>
+            <Certificate certificateKeystoreFile="conf/localhost-rsa.jks"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    -->
+    <!-- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2
+         This connector uses the APR/native implementation which always uses
+         OpenSSL for TLS.
+         Either JSSE or OpenSSL style configuration may be used. OpenSSL style
+         configuration is used below.
+    -->
+    <!--
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11AprProtocol"
+               maxThreads="150" SSLEnabled="true" >
+        <UpgradeProtocol className="org.apache.coyote.http2.Http2Protocol" />
+        <SSLHostConfig>
+            <Certificate certificateKeyFile="conf/localhost-rsa-key.pem"
+                         certificateFile="conf/localhost-rsa-cert.pem"
+                         certificateChainFile="conf/localhost-rsa-chain.pem"
+                         type="RSA" />
+        </SSLHostConfig>
+    </Connector>
+    -->
+
+    <!-- Define an AJP 1.3 Connector on port 8009 -->
+    <!--
+    <Connector protocol="AJP/1.3"
+               address="::1"
+               port="8009"
+               redirectPort="8443" />
+    -->
+
+    <!-- An Engine represents the entry point (within Catalina) that processes
+         every request.  The Engine implementation for Tomcat stand alone
+         analyzes the HTTP headers included with the request, and passes them
+         on to the appropriate Host (virtual host).
+         Documentation at /docs/config/engine.html -->
+
+    <!-- You should set jvmRoute to support load-balancing via AJP ie :
+    <Engine name="Catalina" defaultHost="localhost" jvmRoute="jvm1">
+    -->
+    <Engine defaultHost="localhost" name="Catalina">
+
+      <!--For clustering, please take a look at documentation at:
+          /docs/cluster-howto.html  (simple how to)
+          /docs/config/cluster.html (reference documentation) -->
+      <!--
+      <Cluster className="org.apache.catalina.ha.tcp.SimpleTcpCluster"/>
+      -->
+
+      <!-- Use the LockOutRealm to prevent attempts to guess user passwords
+           via a brute-force attack -->
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <!-- This Realm uses the UserDatabase configured in the global JNDI
+             resources under the key "UserDatabase".  Any edits
+             that are performed against this UserDatabase are immediately
+             available for use by the Realm.  -->
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm" resourceName="UserDatabase"/>
+      </Realm>
+
+      <Host appBase="webapps" autoDeploy="true" name="localhost" unpackWARs="true">
+
+        <!-- SingleSignOn valve, share authentication between web applications
+             Documentation at: /docs/config/valve.html -->
+        <!--
+        <Valve className="org.apache.catalina.authenticator.SingleSignOn" />
+        -->
+
+        <!-- Access log processes all example.
+             Documentation at: /docs/config/valve.html
+             Note: The pattern used is equivalent to using pattern="common" -->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
+
+
+      <Context docBase="JSPDBCPProject" path="/JSPDBCPProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPDBCPProject">
+      <!-- DBCP 설정 -->
+        <!-- 
+        	1. Driver, URL, Username, Password => 톰캣에 의해 Connection 생성
+        	2. Author : 누구에 의해 Connection => 톰캣지정
+        	3. 생성된 Connection 찾을 수 있게 이름 부여
+        	4. 몇 개 생성할지
+        		maxActive : 동시에 사용할 수 있는 Connection의 최대 개수
+        		maxIdle : 최대 유지할 수 있는 Connection
+        		maxWait : 기다리는 시간 지정
+        	DBCP : Database Connection Pool
+        	=> JDBC => 사용자 === 서버 === 오라클
+        						============= 연결하는 시간
+        									  Connection 제한 (동시 접속시 서버가 다운되지 않음)
+        									  웹프로그램의 일반 (DBCP)
+        	
+        	1. 웹(최적화) => 사용자에게 전송하는 속도가 빨라야 함
+        	2. 사용자 응답 (데이터베이스) => 페이지 구현 (인라인뷰)
+        							   Order By => Index()
+        							   검색이 많을 경우 => Index()
+        							   자바로 오라클 연결 => 소모되는 시간 많음 (JDBC는 사용빈도 적음)
+        	3. 오라클에 연결하는 시간을 줄인다
+        	4. Connection의 객체 생성을 제한 => 제한 두지 않으면 무한 생성 (서버 부하 걸림) 
+        		=> Connection 사용 후 반환 => 재사용 가능
+         -->
+         <Resource auth="Container" driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" maxIdle="10" maxWait="-1" name="jdbc/oracle" password="happy" type="javax.sql.DataSource" url="jdbc:oracle:thin:@183.98.140.90:1521:XE" username="hr"/>
+      </Context>
+      
+      <Context docBase="JSPELJSTLProject2" path="/JSPELJSTLProject2" reloadable="true" source="org.eclipse.jst.jee.server:JSPELJSTLProject2">
+         <Resource auth="Container" driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" maxIdle="10" maxWait="-1" name="jdbc/oracle" password="happy" type="javax.sql.DataSource" url="jdbc:oracle:thin:@183.98.140.90:1521:XE" username="hr"/>
+      </Context>
+      <Context docBase="JSPELJstlProject" path="/JSPELJstlProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPELJstlProject"/>
+      <Context docBase="JSPReplyBoardProject" path="/JSPReplyBoardProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPReplyBoardProject">
+         <Resource auth="Container" driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" maxIdle="10" maxWait="-1" name="jdbc/oracle" password="happy" type="javax.sql.DataSource" url="jdbc:oracle:thin:@183.98.140.90:1521:XE" username="hr"/>
+      </Context>
+      <Context docBase="SS" path="/SS" reloadable="true" source="org.eclipse.jst.jee.server:SS"/>
+      <Context docBase="JSPMVCProject1" path="/JSPMVCProject1" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject1"/>
+      <Context docBase="JSPMVCProject2" path="/JSPMVCProject2" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject2"/>
+      <Context docBase="JSPMVCProject3" path="/JSPMVCProject3" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject3"/>
+      <Context docBase="JSPMVCProject4" path="/JSPMVCProject4" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject4"/>
+      <Context docBase="JSPMVCProject5" path="/JSPMVCProject5" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject5">
+         <Resource auth="Container" driverClassName="oracle.jdbc.driver.OracleDriver" maxActive="10" maxIdle="10" maxWait="-1" name="jdbc/oracle" password="happy" type="javax.sql.DataSource" url="jdbc:oracle:thin:@183.98.140.90:1521:XE" username="hr"/>
+      </Context>
+      
+      <Context docBase="JSPMVCProject6" path="/JSPMVCProject6" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject6"/>
+      <Context docBase="ShoecreamProject" path="/ShoecreamProject" reloadable="true" source="org.eclipse.jst.jee.server:ShoecreamProject"/>
+      <Context docBase="JSPFinalProject" path="/JSPFinalProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPFinalProject"/>
+      <Context docBase="JavaScriptBasicProject1" path="/JavaScriptBasicProject1" reloadable="true" source="org.eclipse.jst.jee.server:JavaScriptBasicProject1"/>
+      <Context docBase="ShoecreamProject2" path="/ShoecreamProject2" reloadable="true" source="org.eclipse.jst.jee.server:ShoecreamProject2"/>
+      <Context docBase="JavaScriptBasicProject2" path="/JavaScriptBasicProject2" reloadable="true" source="org.eclipse.jst.jee.server:JavaScriptBasicProject2"/>
+      <Context docBase="ShoecreamProject3" path="/ShoecreamProject3" reloadable="true" source="org.eclipse.jst.jee.server:ShoecreamProject3"/>
+      <Context docBase="JavaScriptBasicProject3" path="/JavaScriptBasicProject3" reloadable="true" source="org.eclipse.jst.jee.server:JavaScriptBasicProject3"/>
+      <Context docBase="Practice" path="/Practice" reloadable="true" source="org.eclipse.jst.jee.server:Practice"/>
+      <Context docBase="FileUpload" path="/FileUpload" reloadable="true" source="org.eclipse.jst.jee.server:FileUpload"/>
+      <Context docBase="JSPBasicProject7" path="/JSPBasicProject7" reloadable="true" source="org.eclipse.jst.jee.server:JSPBasicProject7"/>
+      <Context docBase="JSPMVCProject_3" path="/JSPMVCProject_3" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject_3"/>
+      <Context docBase="JSPMVCProject_4" path="/JSPMVCProject_4" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject_4"/>
+      <Context docBase="JSPMVCProject_5" path="/JSPMVCProject_5" reloadable="true" source="org.eclipse.jst.jee.server:JSPMVCProject_5"/>
+      <Context docBase="MyBatisMiddleProject1" path="/MyBatisMiddleProject1" reloadable="true" source="org.eclipse.jst.jee.server:MyBatisMiddleProject1"/>
+      <Context docBase="JSPMovieProject" path="/JSPMovieProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPMovieProject"/>
+      <Context docBase="JSPMovieMVCProject" path="/JSPMovieMVCProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPMovieMVCProject"/>
+      <Context docBase="JSPAjaxProject_1" path="/JSPAjaxProject_1" reloadable="true" source="org.eclipse.jst.jee.server:JSPAjaxProject_1"/>
+      <Context docBase="JSPAjaxProject_2" path="/JSPAjaxProject_2" reloadable="true" source="org.eclipse.jst.jee.server:JSPAjaxProject_2"/>
+      <Context docBase="JSPDateProject" path="/JSPDateProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPDateProject"/>
+      <Context docBase="JSPFoodLocationProject" path="/JSPFoodLocationProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPFoodLocationProject"/>
+      <Context docBase="JSPReserveProject" path="/JSPReserveProject" reloadable="true" source="org.eclipse.jst.jee.server:JSPReserveProject"/>
+      <Context docBase="ShoeCream" path="/ShoeCream" reloadable="true" source="org.eclipse.jst.jee.server:ShoeCream"/>
+      <Context docBase="ShoeCream2" path="/ShoeCream2" reloadable="true" source="org.eclipse.jst.jee.server:ShoeCream2"/></Host>
+    </Engine>
+  </Service>
+</Server>
